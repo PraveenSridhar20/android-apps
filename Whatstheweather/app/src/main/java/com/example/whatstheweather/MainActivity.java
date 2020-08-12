@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
     HttpURLConnection httpURLConnection;
     JSONObject city;
     JSONArray weatherJSON;
+    JSONObject coords;
+    JSONObject details;
     String jsonString="";
     boolean inCorrectCity=false;
 
@@ -53,11 +55,19 @@ public class MainActivity extends AppCompatActivity {
                     jsonString+=line+'\n';
                 }
                 Log.i("JSON String",jsonString);
+
                 city=new JSONObject(jsonString);
+                coords=new JSONObject(city.getString("coord"));
                 weatherJSON=new JSONArray(city.getString("weather"));
+                details=new JSONObject(city.getString("main"));
+
+
+                result+="Longitude:"+coords.getString("lon")+"\nLatitude:"+coords.getString("lat")+"\nTemperature:"+details.getString("temp")+"\u00B0C\n";
+                result+="Pressure:"+details.getString("pressure")+" mb\n";
                 for (int i=0;i<weatherJSON.length();i++){
                     result+=weatherJSON.getJSONObject(i).getString("main")+": "+weatherJSON.getJSONObject(i).getString("description")+"\n";
                 }
+
                 Log.i("Here is what you are looking for",result);
                 return result;
 
